@@ -1,0 +1,188 @@
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.6",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "🛡️ ITGC Audit Package — Ready for Review",
+      "weight": "Bolder",
+      "size": "Large",
+      "color": "Accent"
+    },
+    {
+      "type": "TextBlock",
+      "text": "${auditType} · ${auditPeriod}",
+      "size": "Medium",
+      "isSubtle": true,
+      "spacing": "None"
+    },
+    {
+      "type": "ColumnSet",
+      "spacing": "Medium",
+      "columns": [
+        {
+          "type": "Column",
+          "width": "stretch",
+          "items": [
+            {
+              "type": "TextBlock",
+              "text": "${evidenceCount}",
+              "size": "ExtraLarge",
+              "weight": "Bolder",
+              "horizontalAlignment": "Center"
+            },
+            {
+              "type": "TextBlock",
+              "text": "Evidence Items",
+              "size": "Small",
+              "isSubtle": true,
+              "horizontalAlignment": "Center",
+              "spacing": "None"
+            }
+          ]
+        },
+        {
+          "type": "Column",
+          "width": "stretch",
+          "items": [
+            {
+              "type": "TextBlock",
+              "text": "${gapCount}",
+              "size": "ExtraLarge",
+              "weight": "Bolder",
+              "horizontalAlignment": "Center",
+              "color": "${if(gapCount > 0, 'Attention', 'Good')}"
+            },
+            {
+              "type": "TextBlock",
+              "text": "Gaps Found",
+              "size": "Small",
+              "isSubtle": true,
+              "horizontalAlignment": "Center",
+              "spacing": "None"
+            }
+          ]
+        },
+        {
+          "type": "Column",
+          "width": "stretch",
+          "items": [
+            {
+              "type": "TextBlock",
+              "text": "${timeSavedDays}d",
+              "size": "ExtraLarge",
+              "weight": "Bolder",
+              "horizontalAlignment": "Center",
+              "color": "Good"
+            },
+            {
+              "type": "TextBlock",
+              "text": "Days Saved",
+              "size": "Small",
+              "isSubtle": true,
+              "horizontalAlignment": "Center",
+              "spacing": "None"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "FactSet",
+      "spacing": "Medium",
+      "facts": [
+        {
+          "title": "Audit Type",
+          "value": "${auditType}"
+        },
+        {
+          "title": "Audit Period",
+          "value": "${auditPeriod}"
+        },
+        {
+          "title": "Critical Gaps",
+          "value": "${criticalGaps}"
+        },
+        {
+          "title": "High Gaps",
+          "value": "${highGaps}"
+        },
+        {
+          "title": "Collected At",
+          "value": "${collectedAt}"
+        },
+        {
+          "title": "Manual Equivalent",
+          "value": "${manualHours} hours"
+        }
+      ]
+    },
+    {
+      "type": "TextBlock",
+      "text": "⚠️ Material Weakness Detected — ${materialWeaknessDomain}",
+      "color": "Attention",
+      "weight": "Bolder",
+      "isVisible": "${materialWeaknessFlag}",
+      "spacing": "Medium"
+    },
+    {
+      "type": "ActionSet",
+      "spacing": "Small",
+      "actions": [
+        {
+          "type": "Action.ShowCard",
+          "title": "📋 View Gap Details",
+          "card": {
+            "type": "AdaptiveCard",
+            "body": [
+              {
+                "type": "Table",
+                "gridStyle": "default",
+                "firstRowAsHeader": true,
+                "columns": [
+                  { "width": 1 },
+                  { "width": 1 },
+                  { "width": 1 },
+                  { "width": 2 },
+                  { "width": 2 },
+                  { "width": 1 }
+                ],
+                "rows": "${gapRows}"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "type": "Action.Execute",
+      "title": "✅ Approve Evidence Package",
+      "verb": "approvePackage",
+      "style": "positive",
+      "data": {
+        "action": "approve",
+        "agentRunId": "${agentRunId}",
+        "auditType": "${auditType}",
+        "auditPeriod": "${auditPeriod}"
+      }
+    },
+    {
+      "type": "Action.Execute",
+      "title": "⚠️ Flag for Revision",
+      "verb": "flagPackage",
+      "style": "destructive",
+      "data": {
+        "action": "reject",
+        "agentRunId": "${agentRunId}"
+      }
+    },
+    {
+      "type": "Action.OpenUrl",
+      "title": "📁 View in SharePoint",
+      "url": "${sharePointUrl}"
+    }
+  ]
+}
